@@ -10,29 +10,37 @@ import SwiftUI
 
 struct OrderRowView: View {
     @State var order: OrderEntity
-    
-    var dateFormatter: DateFormatter{
+
+    var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
         formatter.timeStyle = .short
         return formatter
     }
-    
+
     var body: some View {
-        HStack{
+        HStack {
             Image(order.image)
                 .resizable()
                 .frame(width: 70, height: 70)
-            VStack(alignment: .leading){
+            VStack(alignment: .leading) {
                 Text(order.productName)
                     .font(.title)
                 Spacer()
                 Text(order.details)
-                HStack{
+                HStack {
                     Text("Price: \(order.priceValue)")
+                    Text("Quantity: \(order.quantity)")
                     Text("注文日時: \(order.date,formatter:dateFormatter)")
                         .font(.caption)
                 }
+            }
+            if order.favorite {
+                Image(systemName: "heart.circle.fill")
+                    .foregroundColor(.pink)
+            } else {
+                Image(systemName: "heart.circle")
+                    .foregroundColor(.gray)
             }
         }
     }
@@ -40,26 +48,27 @@ struct OrderRowView: View {
 
 #Preview(traits: .fixedLayout(width: 400, height: 100)) {
     // Create a sample order for preview
-    var orderStore : OrderStore{
+    var orderStore: OrderStore {
         let orderStore = OrderStore()
-        orderStore.orders.append(OrderEntity(
-            name: 0,
-            price: 0,
-            image: "SOUNDTRACKS",
-            details: "Sample order for preview",
-            quantity: 1
-        ))
+        orderStore.orders.append(
+            OrderEntity(
+                name: 0,
+                price: 0,
+                image: "SOUNDTRACKS",
+                details: "Sample order for preview",
+                quantity: 1
+            ))
         return orderStore
     }
     OrderDetail(order: orderStore.orders[0])
-    
+
     // Create a sample order for preview
-//    let sampleOrder = OrderEntity(
-//        name: 0,
-//        price: 0,
-//        image: "SOUNDTRACKS",
-//        details: "Sample order for preview",
-//        quantity: 1
-//    )
-//    OrderRowView(order: sampleOrder)
+    //    let sampleOrder = OrderEntity(
+    //        name: 0,
+    //        price: 0,
+    //        image: "SOUNDTRACKS",
+    //        details: "Sample order for preview",
+    //        quantity: 1
+    //    )
+    //    OrderRowView(order: sampleOrder)
 }

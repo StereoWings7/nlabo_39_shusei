@@ -7,34 +7,36 @@
 
 import Foundation
 
+//2025/7/10追記 iOS18で使える@Observable属性を使って、OrderEntityを定義する。
+// 第39回 p.12,17と関連して。
+// class OrderStoreは、アプリ全体で共有される注文のデータを管理するためのクラスです。
+// OrderEntityインスタンスのリストを保持し、新しい注文を追加するメソッドを提供します。
 @Observable
 class OrderStore {
     var orders: [OrderEntity] = []
-    
+
     // Method to add a new order
-    func addOrder(selectProduct: Int, quantity: Int) {
+    func addOrder(selectProduct: Int, quantity: Int, message: String) {
         let newOrder = OrderEntity(
             name: Int16(selectProduct),
             price: Int16(selectProduct),
             image: getImageName(for: selectProduct),
             details: "Order from app",
-            quantity: Int16(quantity)
+            quantity: Int16(quantity),
+            message: String(message)
         )
         orders.append(newOrder)
     }
-    
+
     private func getImageName(for productIndex: Int) -> String {
-        switch productIndex {
-        case 0: return "SOUNDTRACKS"
-        case 1: return "it's_a_wonderful_world"
-        case 2: return "HANABI"
-        case 3: return "youthful_days"
-        default: return "shop"
+        guard productIndex >= 0 && productIndex < nameArray.count else {
+            return "shop"
         }
+        return nameArray[productIndex]
     }
 }
 
-struct ShopStore{
+struct ShopStore {
     let specials: [Special] = load("special.json")
     let shops: [Shop] = load("shop.json")
 }
@@ -57,7 +59,7 @@ func load<T: Decodable>(_ filename: String, as type: T.Type = T.self) -> T {
         print("⚠️ Error loading \(filename): \(error.localizedDescription)")
         fatalError("Couldn't load \(filename) from main bundle")
     }
-    
+  
     do {
         let decoder = JSONDecoder()
         // ISO 8601 date format for modern JSON handling

@@ -8,22 +8,25 @@
 
 import SwiftUI
 
+// 2025/7/10追記
+// 第39回 p.20と関連して。
+// OrderEntityは@Observable属性を付与しているので、SceneDelegate.swiftなどで注入する必要はない。
 struct ContentView: View {
     var body: some View {
-        TabView{
+        TabView {
             HomeView()
-                .tabItem{
-                    Image(systemName:"house.fill")
+                .tabItem {
+                    Image(systemName: "house.fill")
                     Text("Home")
                 }
             OrderView()
-                .tabItem{
-                    Image(systemName:"textbox")
+                .tabItem {
+                    Image(systemName: "textbox")
                     Text("Order")
                 }
             OrderHistoryView()
-                .tabItem{
-                    Image(systemName:"list.bullet")
+                .tabItem {
+                    Image(systemName: "list.bullet")
                     Text("List")
                 }
         }
