@@ -27,7 +27,7 @@ struct HomeView: View {
     }
     
     var body: some View {
-        NavigationView{
+        NavigationStack{
             ScrollView{
                 // ここでようやくNavigationViewの中でShopRowViewを呼ぶので、NavigationLinkが機能するようになる。
                 ShopRowView(shops: shopStore.shops)
@@ -36,7 +36,7 @@ struct HomeView: View {
                     CategoryRowView(categoryName: key, items: self.categories[key]!)
                 }
             }
-            .navigationBarTitle(Text("Home"))
+            .navigationTitle("Home")
         }
     }
 }

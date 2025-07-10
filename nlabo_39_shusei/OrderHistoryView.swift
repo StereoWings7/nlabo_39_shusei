@@ -11,9 +11,9 @@ import SwiftUI
 
 struct OrderHistoryView: View {
     @State var showFavoritesOnly = false
-    @State private var orderStore = OrderStore()
+    // Use the shared OrderStore instance instead of creating a new one
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List{
                 Toggle(isOn: $showFavoritesOnly){
                     Text("Favorites Only")

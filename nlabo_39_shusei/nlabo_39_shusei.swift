@@ -12,6 +12,8 @@ struct nlabo_39_shuseiApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(orderStore)
+                .environment(shopStore)
         }
     }
 }

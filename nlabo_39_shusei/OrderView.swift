@@ -79,17 +79,20 @@ struct OrderView: View {
                 }
             }.padding()
             
-            Spacer().alert(isPresented: $toSave){
-                Alert(title: Text("注文確認"),
-                      message:Text("注文を確定しますか?"),
-                      primaryButton: .default(Text("はい"),action:{self.save()}),
-                      secondaryButton: .cancel(Text("いいえ")))
+        }
+        .alert("注文確認", isPresented: $toSave) {
+            Button("はい") {
+                self.save()
             }
-            Spacer().alert(isPresented: $isSaved){
-                Alert(title:Text("お買い上げありがとうござます。"),
-                      message:Text("注文が確定しました。"),
-                      dismissButton: .default(Text("OK")))
-            }
+            Button("いいえ", role: .cancel) { }
+        } message: {
+            Text("注文を確定しますか?")
+        }
+        .alert("お買い上げありがとうござます。", isPresented: $isSaved) {
+            Button("OK") { }
+        } message: {
+            Text("注文が確定しました。")
+        }
         }
     }
 }

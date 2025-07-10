@@ -39,28 +39,32 @@ struct ShopStore{
     let shops: [Shop] = load("shop.json")
 }
 
-// Create shared instance
+// Create shared instances for environment
 let orderStore = OrderStore()
 let shopStore = ShopStore()
 
 func load<T: Decodable>(_ filename: String, as type: T.Type = T.self) -> T {
-    let data: Data
-    guard let file = Bundle.main.url(forResource: filename, withExtension: nil)
-    else {
-        fatalError("Couldn't find \(filename) in main bundle.")
+    // Better error handling for educational purposes
+    guard let file = Bundle.main.url(forResource: filename, withExtension: nil) else {
+        print("⚠️ Error: Couldn't find \(filename) in main bundle.")
+        fatalError("File not found: \(filename)")
     }
+    
+    let data: Data
     do {
         data = try Data(contentsOf: file)
     } catch {
-        fatalError("Couldn't load \(filename) from main bundle:\n\(error)")
+        print("⚠️ Error loading \(filename): \(error.localizedDescription)")
+        fatalError("Couldn't load \(filename) from main bundle")
     }
     
-    do{
+    do {
         let decoder = JSONDecoder()
-        //decoder.dateDecodingStrategy = .formatted(DateFormatter())
+        // ISO 8601 date format for modern JSON handling
         decoder.dateDecodingStrategy = .iso8601
         return try decoder.decode(T.self, from: data)
     } catch {
-        fatalError("Couldn't parse \(filename) as \(T.self):\n\(error)")
+        print("⚠️ Error parsing \(filename): \(error.localizedDescription)")
+        fatalError("Couldn't parse \(filename) as \(T.self)")
     }
 }
