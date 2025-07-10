@@ -11,48 +11,49 @@ import SwiftUI
 
 struct OrderView: View {
     @State private var selectProduct: Int = 0
-    @State private var orderNum : Int = 1
+    @State private var quantity: Int = 1
     @State private var showImage: Bool = true
+    @State private var message = ""
     //第38回p.23でアラート表示用に追加
     @State private var toSave = false
     @State private var isSaved = false
-    //@State var orderStore : OrderStore // Data.swiftで定義したOrderStoreを使う
-    
+
     private func save() {
-        self.toSave = false // 一旦閉じてから
+        self.toSave = false  // 一旦閉じてから
         // Add order to the shared OrderStore
-        orderStore.addOrder(selectProduct: selectProduct, quantity: orderNum)
-        
+        // orderStore.addOrderはData.swiftで定義したメソッド
+        orderStore.addOrder(selectProduct: selectProduct, quantity: quantity, message: message)
+
         // iOS 16.0以降では以下のような書き方が推奨(??というほどでもないか)
-        Task{
+        Task {
             try await Task.sleep(for: .seconds(0.1))
-            self.isSaved = true //という風に段階を追わないと、2つめのアラートがうまく出てこない
+            self.isSaved = true  //という風に段階を追わないと、2つめのアラートがうまく出てこない
             self.clear()
         }
     }
-    
-    private func clear(){
+
+    private func clear() {
         showImage = true
         selectProduct = 0
-        orderNum = 1
+        quantity = 1
     }
-    
+
     let nameArray = ["SOUNDTRACKS", "it's a wonderful world", "HANABI", "youthful days"]
-    
+
     var body: some View {
-        ScrollView{
-            VStack{
-                if(showImage){
+        ScrollView {
+            VStack {
+                if showImage {
                     Image("shop")
                         .resizable()
                 }
                 Toggle(isOn: $showImage) {
                     Text("画像を表示する")
                 }
-                HStack{
+                HStack {
                     Text("商品選択")
                     Picker(selection: $selectProduct, label: Text("商品")) {
-                        ForEach(0 ..< nameArray.count, id: \.self) { index in
+                        ForEach(0..<nameArray.count, id: \.self) { index in
                             Text(self.nameArray[index])
                                 .tag(index)
                         }.labelsHidden()
@@ -64,33 +65,38 @@ struct OrderView: View {
                 //代わりに、Data.swiftで定義したpriceArrayを使う
                 //Text("商品金額:" + "\(orderStore.orders[selectProduct].priceValue)円")
                 Text("商品金額: \(priceArray[selectProduct])円")
-                Stepper(value: $orderNum, in: 1...100) {
-                    Text("購入数:\( orderNum )")
+                Stepper(value: $quantity, in: 1...100) {
+                    Text("購入数:\( quantity )")
                 }
-                //Text("購入金額: \(orderStore.orders[selectProduct].priceValue * orderNum)円")
-                Text("購入金額: \(priceArray[selectProduct] * orderNum)円")
-                
+                //Text("購入金額: \(orderStore.orders[selectProduct].priceValue * quantity)円")
+                Text("購入金額: \(priceArray[selectProduct] * quantity)円")
+                //
+                TextField("お店へのメッセージ", text: $message)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+
                 Divider()
-                
+
                 Button(action: {
                     self.toSave = true
                 }) {
                     Text("注文する!")
                 }
             }.padding()
-            
-            Spacer().alert(isPresented: $toSave){
-                Alert(title: Text("注文確認"),
-                      message:Text("注文を確定しますか?"),
-                      primaryButton: .default(Text("はい"),action:{self.save()}),
-                      secondaryButton: .cancel(Text("いいえ")))
+
+            Spacer().alert(isPresented: $toSave) {
+                Alert(
+                    title: Text("注文確認"),
+                    message: Text("注文を確定しますか?"),
+                    primaryButton: .default(Text("はい"), action: { self.save() }),
+                    secondaryButton: .cancel(Text("いいえ")))
             }
-            Spacer().alert(isPresented: $isSaved){
-                Alert(title:Text("お買い上げありがとうござます。"),
-                      message:Text("注文が確定しました。"),
-                      dismissButton: .default(Text("OK")))
+            Spacer().alert(isPresented: $isSaved) {
+                Alert(
+                    title: Text("お買い上げありがとうござます。"),
+                    message: Text("注文が確定しました。"),
+                    dismissButton: .default(Text("OK")))
             }
-        }
+        }  //第40回 p.24に関連して。iOS14以降ではキーボードのSafeAreaの明示的な管理は不要
     }
 }
 
