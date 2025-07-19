@@ -68,7 +68,8 @@ struct OrderDetail: View {
                 price: 0,
                 image: "SOUNDTRACKS",
                 details: "Sample order for preview",
-                quantity: 1
+                quantity: 1,
+                favorite: true
             ))
         return orderStore
     }
