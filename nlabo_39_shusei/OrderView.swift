@@ -22,7 +22,8 @@ struct OrderView: View {
         self.toSave = false  // 一旦閉じてから
         // Add order to the shared OrderStore
         // orderStore.addOrderはData.swiftで定義したメソッド
-        orderStore.addOrder(selectProduct: selectProduct, quantity: quantity, message: message)
+        orderStore.addOrder(selectProduct: selectProduct, quantity: quantity)
+        //orderStore.addOrder(selectProduct: selectProduct, quantity: quantity, message: message)
 
         // iOS 16.0以降では以下のような書き方が推奨(??というほどでもないか)
         Task {

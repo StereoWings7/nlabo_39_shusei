@@ -52,7 +52,7 @@ struct OrderDetail: View {
             Text("Price: \(order.priceValue)")
             Text("Quantity: \(order.quantity)")
             Text("注文日時: \(order.date,formatter:dateFormatter)")
-            Text("お店へのメッセージ: \(order.message)")
+                //Text("お店へのメッセージ: \(order.message)")
                 .padding()
         }
     }

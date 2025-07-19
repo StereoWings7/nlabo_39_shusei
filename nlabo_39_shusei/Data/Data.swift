@@ -16,14 +16,16 @@ class OrderStore {
     var orders: [OrderEntity] = []
 
     // Method to add a new order
-    func addOrder(selectProduct: Int, quantity: Int, message: String) {
+    func addOrder(selectProduct: Int, quantity: Int) {
+        //func addOrder(selectProduct: Int, quantity: Int, message: String) {
         let newOrder = OrderEntity(
             name: Int16(selectProduct),
             price: Int16(selectProduct),
             image: getImageName(for: selectProduct),
             details: "Order from app",
-            quantity: Int16(quantity),
-            message: String(message)
+            quantity: Int16(quantity)
+            //quantity: Int16(quantity),
+            //message: String(message)
         )
         orders.append(newOrder)
     }
@@ -51,7 +53,7 @@ func load<T: Decodable>(_ filename: String, as type: T.Type = T.self) -> T {
         print("⚠️ Error: Couldn't find \(filename) in main bundle.")
         fatalError("File not found: \(filename)")
     }
-    
+
     let data: Data
     do {
         data = try Data(contentsOf: file)
@@ -59,7 +61,7 @@ func load<T: Decodable>(_ filename: String, as type: T.Type = T.self) -> T {
         print("⚠️ Error loading \(filename): \(error.localizedDescription)")
         fatalError("Couldn't load \(filename) from main bundle")
     }
-  
+
     do {
         let decoder = JSONDecoder()
         // ISO 8601 date format for modern JSON handling

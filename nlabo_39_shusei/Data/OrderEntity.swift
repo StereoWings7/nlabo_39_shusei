@@ -45,7 +45,7 @@ class OrderEntity: Identifiable {
     public var date: Date
     public var quantity: Int16
     public var favorite: Bool
-    public var message: String
+    //public var message: String
 
     public var productName: String {
         ProductName(rawValue: self.name)!.name
@@ -63,8 +63,9 @@ class OrderEntity: Identifiable {
         details: String = "",
         date: Date = Date(),
         quantity: Int16 = 1,
-        favorite: Bool = false,
-        message: String = ""
+        favorite: Bool = false
+            //favorite: Bool = false,
+            //message: String = ""
     ) {
         self.id = id
         self.name = name
@@ -74,6 +75,6 @@ class OrderEntity: Identifiable {
         self.date = date
         self.quantity = quantity
         self.favorite = favorite
-        self.message = message
+        //self.message = message
     }
 }
